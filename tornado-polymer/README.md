@@ -9,7 +9,7 @@
 ## Usage
 
     $ pip install -r requirements.txt
-    $ git clone git://github.com/Polymer/polymer.git --recursive static/polymer-all
+    $ git clone git://github.com/Polymer/polymer.git --recursive static/polymer
     $ python server.py
     go to http://localhost:8888/
     click the button and enjoy!
