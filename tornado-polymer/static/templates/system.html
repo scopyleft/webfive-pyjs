@@ -1,0 +1,74 @@
+<element name="web-socket" attributes="socketUrl message">
+  <script>
+    Polymer.register(this, {
+      message: '',
+      ready: function() {
+        // Cleanly close websocket when unload window
+        window.addEventListener('beforeunload', this.beforeUnload.bind(this));
+      },
+      socketUrlChanged: function() {
+        if (window.WebSocket) {
+            this.ws = new WebSocket("ws://" + document.domain + ':8888/cpu/' + this.socketUrl);
+            this.ws.onmessage = this.receive.bind(this);
+        }
+      },
+      beforeUnload: function() {
+        this.ws.onclose = function () {}; // disable onclose handler first
+        this.ws.close();
+      },
+      receive: function(msg) {
+        this.message = JSON.parse(msg.data);
+      },
+      send: function(data) {
+        this.ws.send(data);
+      }
+    });
+  </script>
+</element>
+
+<element name="draw-lines" attributes="socketUrl status">
+  <script>
+    Polymer.register(this, {
+      xvalues: [],
+      yvalues: [],
+      draw: function(valuesx, valuesy) {
+        // removing the old chart
+        var svgTag = document.querySelector('svg');
+        document.getElementById(this.socketUrl).removeChild(svgTag);
+        this.r = Raphael(this.socketUrl, 10, 70, 1040, 480);
+        this.r.linechart(20, 0, 1000, 400, valuesx, valuesy, {
+            axis: "0 0 1 1",
+            smooth: 1,
+            symbol: 'circle',
+            axisxstep: 20
+        });
+      },
+      statusChanged: function() {
+        this.xvalues.push(this.status.x);
+        this.yvalues.push(this.status.y);
+        this.draw(this.xvalues, this.yvalues);
+      }
+    });
+  </script>
+</element>
+
+<element name="system" attributes="socketUrl">
+  <template>
+    <web-socket id="socket" socketUrl="{{socketUrl}}" message="{{message}}"></web-socket>
+    <draw-lines id="lines" socketUrl="{{socketUrl}}" status="{{status}}"></draw-lines>
+    <p id="history"></p>
+    <button on-click="sendAction">Draw {{socketUrl}}!</button>
+  </template>
+  <script>
+    Polymer.register(this, {
+        message: '',
+        messageChanged: function() {
+            this.$.history.innerHTML = 'x=' + this.message.x + ', y=' + this.message.y;
+            this.status = this.message;
+        },
+        sendAction: function() {
+            this.$.socket.send('Draw!');
+        }
+    });
+  </script>
+</element>

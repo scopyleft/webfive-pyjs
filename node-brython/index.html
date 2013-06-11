@@ -1,0 +1,19 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="/brython.js"></script>
+    <link rel="stylesheet" href="/css/project.css" />
+</head>
+<body onload="brython()">
+<script type="text/python" src="comments.py"></script>
+<div class="commentBox">
+    <h1>Comments</h1>
+    <div class="commentList" id="comments"></div>
+    <form method="post">
+        <input type="text" placeholder="Your name" name="author" id="author" />
+        <input type="text" placeholder="Say something..." name="text" id="text" />
+        <input type="submit" value="Post" id="submitButton" />
+    </form>
+</div>
+</body>
+</html>
