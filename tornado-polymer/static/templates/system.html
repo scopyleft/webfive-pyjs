@@ -26,21 +26,29 @@
   </script>
 </element>
 
-<element name="draw-lines" attributes="socketUrl status">
+<element name="draw-lines" attributes="id status">
   <script>
     Polymer.register(this, {
       xvalues: [],
       yvalues: [],
-      draw: function(valuesx, valuesy) {
+      ready: function() {
+        this.r = Raphael(10, 70, 1040, 480);
+        // should work, even with this.id but doesn't :(
+        //this.r = Raphael("global", 10, 70, 1040, 480);
+      },
+      reset: function() {
         // removing the old chart
         var svgTag = document.querySelector('svg');
-        document.getElementById(this.socketUrl).removeChild(svgTag);
-        this.r = Raphael(this.socketUrl, 10, 70, 1040, 480);
+        document.getElementById("root").removeChild(svgTag);
+        this.ready();
+      },
+      draw: function(valuesx, valuesy) {
+        this.reset();
         this.r.linechart(20, 0, 1000, 400, valuesx, valuesy, {
-            axis: "0 0 1 1",
-            smooth: 1,
-            symbol: 'circle',
-            axisxstep: 20
+          axis: "0 0 1 1",
+          smooth: 1,
+          symbol: 'circle',
+          axisxstep: 20
         });
       },
       statusChanged: function() {
@@ -52,10 +60,10 @@
   </script>
 </element>
 
-<element name="system" attributes="socketUrl">
+<element name="system" attributes="id socketUrl">
   <template>
     <web-socket id="socket" socketUrl="{{socketUrl}}" message="{{message}}"></web-socket>
-    <draw-lines id="lines" socketUrl="{{socketUrl}}" status="{{status}}"></draw-lines>
+    <draw-lines id="lines" id="{{id}}" status="{{status}}"></draw-lines>
     <p id="history"></p>
     <button on-click="sendAction">Draw {{socketUrl}}!</button>
   </template>
