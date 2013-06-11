@@ -1,6 +1,5 @@
 <html ng-app>
 <head>
-<script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
 
 <script>
@@ -12,7 +11,7 @@
         messages.appendChild(item);
     }
 
-    var ws = new SockJS("ws://127.0.0.1:8081");
+    var ws = new WebSocket("ws://127.0.0.1:8081");
     ws.onopen = function(e) {
         show_message("Connection open.");
     };
