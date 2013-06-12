@@ -3,34 +3,19 @@
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
 
 <script>
-    function show_message(message) {
-        var messages = document.getElementById("messages");
-        var item = document.createElement("li");
-        var content = document.createTextNode(message);
-        item.appendChild(content);
-        messages.appendChild(item);
-    }
-
-    var ws = new WebSocket("ws://127.0.0.1:8081");
-    ws.onopen = function(e) {
-        show_message("Connection open.");
-    };
-    ws.onclose = function(e) {
-        show_message("Connection closed.");
-    };
     function ChatCtrl($scope) {
+        var wsuri = "ws://127.0.0.1:8081",
+            ws = new WebSocket(wsuri);
         $scope.messages = [];
+
         $scope.sendMessage = function() {
             ws.send($scope.messageText);
-            show_message($scope.messageText + ' sent to the ws server');
             $scope.messageText = "";
         };
 
         ws.onmessage = function(e) {
-            show_message('on message ' + e.data);
             $scope.messages.push(e.data);
             $scope.$apply();
-            show_message("pushed to the scope");
         };
     }
 </script>
@@ -39,11 +24,11 @@
 <body>
 <div ng-controller="ChatCtrl">
     <ul id="messages">
-        <li ng-repeat="message in messages">via ng: {{message}}</li>
+        {% raw %}<li ng-repeat="message in messages">{{message}}</li>{% endraw %}
     </ul>
 
     <form ng-submit="sendMessage()">
-        <input type="text" ng-model="messageText" placeholder="Type your message here" />
+        <input type="text" ng-model="messageText" placeholder="Type your message here" autofocus />
         <input type="submit" value="Send" />
     </form
 </div>

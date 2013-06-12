@@ -10,7 +10,7 @@ logging.getLogger('websockets').setLevel(logging.DEBUG)
 @tulip.coroutine
 def ws_tulip(websocket, uri):
     name = yield from websocket.recv()
-    websocket.send("Hello {}!".format(name))
+    websocket.send("ws> {}".format(name))
 
 
 if __name__ == '__main__':

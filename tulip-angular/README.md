@@ -5,6 +5,10 @@
 `Flask` (Python3.3) is serving both http and websocket handlers using
 `Tulip` and `websockets` (Python3.3) rendered using `AngularJS` (JavaScript).
 
+All Python3.3 dependencies have been put directly in the repo for
+simplicity and lack of knowledge regarding Python3's packaging/virtualenv
+(+cutting edge versions of flask/jinja2/werkzeug).
+
 ## Usage
 
 Launch both
