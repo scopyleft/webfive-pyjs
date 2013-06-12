@@ -26,15 +26,13 @@
   </script>
 </element>
 
-<element name="draw-lines" attributes="id status">
+<element name="draw-lines" attributes="status">
   <script>
     Polymer.register(this, {
       xvalues: [],
       yvalues: [],
       ready: function() {
         this.r = Raphael(10, 70, 1040, 480);
-        // should work, even with this.id but doesn't :(
-        //this.r = Raphael("global", 10, 70, 1040, 480);
       },
       reset: function() {
         // removing the old chart
@@ -60,10 +58,10 @@
   </script>
 </element>
 
-<element name="system-widget" attributes="id socketUrl">
+<element name="system-widget" attributes="socketUrl">
   <template>
     <web-socket id="socket" socketUrl="{{socketUrl}}" message="{{message}}"></web-socket>
-    <draw-lines id="lines" id="{{id}}" status="{{status}}"></draw-lines>
+    <draw-lines id="lines" status="{{status}}"></draw-lines>
     <p id="history"></p>
     <button on-click="sendAction">Draw {{socketUrl}}!</button>
   </template>

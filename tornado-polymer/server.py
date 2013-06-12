@@ -37,25 +37,9 @@ class GlobalCPUWSHandler(websocket.WebSocketHandler):
             time.sleep(1)
 
 
-class FirefoxCPUWSHandler(websocket.WebSocketHandler):
-
-    def on_message(self, message):
-        firefox_pid = [pid for pid in psutil.get_pid_list()
-                       if psutil.Process(pid).name == "firefox"][0]
-        firefox_process = psutil.Process(firefox_pid)
-        for i in range(21):
-            data = {
-                'x': i,
-                'y': firefox_process.get_cpu_percent(interval=1.0)
-            }
-            self.write_message(json.dumps(data))
-            time.sleep(1)
-
-
 application = web.Application([
     (r'/', MainHandler),
     (r'/cpu/global', GlobalCPUWSHandler),
-    (r'/cpu/firefox', FirefoxCPUWSHandler),
     (r"/", web.StaticFileHandler,
         dict(path=settings['static_path'])),
 ], **settings)
