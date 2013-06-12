@@ -67,7 +67,7 @@
   </template>
   <script>
     Polymer.register(this, {
-      this.message: '',
+      message: '',
       messageChanged: function() {
         this.$.history.innerHTML = 'x=' + this.message.x + ', y=' + this.message.y;
         this.status = this.message;
