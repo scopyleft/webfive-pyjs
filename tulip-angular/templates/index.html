@@ -1,36 +1,33 @@
 <html ng-app>
 <head>
-<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+    <script>
+        function ChatCtrl($scope) {
+            var ws = new WebSocket("ws://127.0.0.1:8081");
+            $scope.messages = [];
 
-<script>
-    function ChatCtrl($scope) {
-        var wsuri = "ws://127.0.0.1:8081",
-            ws = new WebSocket(wsuri);
-        $scope.messages = [];
+            $scope.sendMessage = function() {
+                ws.send($scope.messageText);
+                $scope.messageText = "";
+            };
 
-        $scope.sendMessage = function() {
-            ws.send($scope.messageText);
-            $scope.messageText = "";
-        };
-
-        ws.onmessage = function(e) {
-            $scope.messages.push(e.data);
-            $scope.$apply();
-        };
-    }
-</script>
+            ws.onmessage = function(e) {
+                $scope.messages.push(e.data);
+                $scope.$apply();
+            };
+        }
+    </script>
 </head>
-
 <body>
-<div ng-controller="ChatCtrl">
-    <ul id="messages">
-        {% raw %}<li ng-repeat="message in messages">{{message}}</li>{% endraw %}
-    </ul>
+    <div ng-controller="ChatCtrl">
+        <ul id="messages">
+            {% raw %}<li ng-repeat="message in messages">{{message}}</li>{% endraw %}
+        </ul>
 
-    <form ng-submit="sendMessage()">
-        <input type="text" ng-model="messageText" placeholder="Type your message here" autofocus />
-        <input type="submit" value="Send" />
-    </form
-</div>
+        <form ng-submit="sendMessage()">
+            <input type="text" ng-model="messageText" placeholder="Type your message here" autofocus />
+            <input type="submit" value="Send" />
+        </form
+    </div>
 </body>
 </html>
