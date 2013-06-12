@@ -1,70 +1,38 @@
 import os
-import sys
 import json
-import time
-
 import psutil
 
-from tornado import httpserver, ioloop, web, websocket
+from wsgiref.simple_server import make_server
+
+from pyramid.config import Configurator
+from pyramid.response import Response
+from pyramid.view import view_config
 
 
-SERVER_PATH = os.path.abspath(os.path.dirname(__file__))
-STATIC_PATH = os.path.join(SERVER_PATH, 'static')
+project_path = os.path.dirname(os.path.abspath(__file__))
 
-settings = {
-    "static_path": STATIC_PATH,
-    "server_name": "localhost",
-    "debug": True,
-}
+def home(request):
+    template = os.path.join(project_path, "static", "templates", "index.html")
+    return Response(open(template).read())
 
-connections = []
+def process(request):
+    name = request.matchdict.get('name')
+    pid = [pid for pid in psutil.get_pid_list()
+                       if psutil.Process(pid).name == name][0]
+    proc = psutil.Process(pid)
+    print name, pid
+    return Response(json.dumps(
+        proc.get_cpu_percent(interval=1)
+        ))
 
+if __name__ == '__main__':
+    config = Configurator()
+    config.add_route('home', '/')
+    config.add_view(home, route_name='home')
+    config.add_route('process', '/process/{name}')
+    config.add_view(process, route_name='process')
+    config.add_static_view(name='static', path='static/')
 
-class MainHandler(web.RequestHandler):
-
-    def get(self):
-        self.render("static/templates/index.html",
-                    server_name=settings['server_name'])
-
-
-class GlobalCPUWSHandler(websocket.WebSocketHandler):
-
-    def on_message(self, message):
-        for i in range(21):
-            data = {
-                'x': i,
-                'y': psutil.cpu_percent(interval=1)
-            }
-            self.write_message(json.dumps(data))
-            time.sleep(1)
-
-
-class FirefoxCPUWSHandler(websocket.WebSocketHandler):
-
-    def on_message(self, message):
-        firefox_pid = [pid for pid in psutil.get_pid_list()
-                       if psutil.Process(pid).name == "firefox"][0]
-        firefox_process = psutil.Process(firefox_pid)
-        for i in range(21):
-            data = {
-                'x': i,
-                'y': firefox_process.get_cpu_percent(interval=1.0)
-            }
-            self.write_message(json.dumps(data))
-            time.sleep(1)
-
-
-application = web.Application([
-    (r'/', MainHandler),
-    (r'/cpu/global', GlobalCPUWSHandler),
-    (r'/cpu/firefox', FirefoxCPUWSHandler),
-    (r"/", web.StaticFileHandler,
-        dict(path=settings['static_path'])),
-], **settings)
-
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        settings['server_name'] = sys.argv[1]
-    http_server = httpserver.HTTPServer(application)
-    http_server.listen(8888)
-    ioloop.IOLoop.instance().start()
+    app = config.make_wsgi_app()
+    server = make_server('0.0.0.0', 8080, app)
+    server.serve_forever()
