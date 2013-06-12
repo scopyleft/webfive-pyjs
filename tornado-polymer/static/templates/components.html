@@ -1,15 +1,15 @@
 <element name="web-socket" attributes="socketUrl message">
   <script>
     Polymer.register(this, {
-      message: '',
       ready: function() {
+        this.message = '';
         // Cleanly close websocket when unload window
         window.addEventListener('beforeunload', this.beforeUnload.bind(this));
       },
       socketUrlChanged: function() {
         if (window.WebSocket) {
-            this.ws = new WebSocket("ws://" + document.domain + ':8888/cpu/' + this.socketUrl);
-            this.ws.onmessage = this.receive.bind(this);
+          this.ws = new WebSocket("ws://" + document.domain + ':8888/cpu/' + this.socketUrl);
+          this.ws.onmessage = this.receive.bind(this);
         }
       },
       beforeUnload: function() {
@@ -42,9 +42,9 @@
         document.getElementById("root").removeChild(svgTag);
         this.ready();
       },
-      draw: function(valuesx, valuesy) {
+      draw: function(xvalues, yvalues) {
         this.reset();
-        this.r.linechart(20, 0, 1000, 400, valuesx, valuesy, {
+        this.r.linechart(20, 0, 1000, 400, xvalues, yvalues, {
           axis: "0 0 1 1",
           smooth: 1,
           symbol: 'circle',
@@ -60,7 +60,7 @@
   </script>
 </element>
 
-<element name="system" attributes="id socketUrl">
+<element name="system-widget" attributes="id socketUrl">
   <template>
     <web-socket id="socket" socketUrl="{{socketUrl}}" message="{{message}}"></web-socket>
     <draw-lines id="lines" id="{{id}}" status="{{status}}"></draw-lines>
@@ -69,14 +69,14 @@
   </template>
   <script>
     Polymer.register(this, {
-        message: '',
-        messageChanged: function() {
-            this.$.history.innerHTML = 'x=' + this.message.x + ', y=' + this.message.y;
-            this.status = this.message;
-        },
-        sendAction: function() {
-            this.$.socket.send('Draw!');
-        }
+      this.message: '',
+      messageChanged: function() {
+        this.$.history.innerHTML = 'x=' + this.message.x + ', y=' + this.message.y;
+        this.status = this.message;
+      },
+      sendAction: function() {
+        this.$.socket.send('Draw!');
+      }
     });
   </script>
 </element>

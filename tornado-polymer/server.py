@@ -7,8 +7,6 @@ import psutil
 
 from tornado import httpserver, ioloop, web, websocket
 
-MAX_POINTS = 10
-
 SERVER_PATH = os.path.abspath(os.path.dirname(__file__))
 STATIC_PATH = os.path.join(SERVER_PATH, 'static')
 
