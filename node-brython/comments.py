@@ -1,26 +1,21 @@
 import html
-import json
 
 # Hacking editor
 doc = doc
 log = log
 ajax = ajax
 alert = alert
+
 timeout = 4  # seconds
-url = "comments.json"
 
 
 def on_complete(req):
     if req.status == 200 or req.status == 0:
+        doc["comments"].html = ''
         comments = doc["comments"]
-        for comment_data in json.parse(req.text):
-            log(comment_data)
-            # Bug: comment_data.author doesn't work...
-            author = req.text
-            text = req.text
+        for comment_data in req.text.split('@@@'):
             comment = html.DIV(Class="comment")
-            comment <= html.H2(author, Class="commentAuthor")
-            comment <= html.SPAN(text)
+            comment <= html.H3(comment_data, Class="commentAuthor")
             comments <= comment
         doc["comments"].html = comments.html
     else:
@@ -35,7 +30,7 @@ def load_comments():
     req = ajax()
     req.on_complete = on_complete
     req.set_timeout(timeout, err_msg)
-    req.open('GET', url, True)  # Check why True!
+    req.open('GET', "comments", True)  # Check why True!
     req.send()
 
 
@@ -43,12 +38,11 @@ def post_comment(event):
     req = ajax()
     req.on_complete = on_complete
     req.set_timeout(timeout, err_msg)
-    req.open('POST', url, True)
+    req.open('POST', event.target.form.action, True)
     req.set_header('content-type', 'application/x-www-form-urlencoded')
-    req.send({
-        'author': doc["author"].value,
-        'text': doc["text"].value})
-    alert('Manual event.preventDefault(). Press esc twice to stay here.')
+    comment = doc["text"].value + ' — ' + doc["author"].value
+    req.send({'comment': comment})
+    event.preventDefault()
 
 
 load_comments()
