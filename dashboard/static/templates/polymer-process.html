@@ -10,10 +10,8 @@
   <script>
     Polymer.register(this, {
         ready: function() {
-            this.values = [];
-            var self = this;
             this.$.ajax.callback = function(resp) {
-                self.$.graph.latestValue = resp;
+                this.$.graph.latestValue = resp;
             }
         }
     });
