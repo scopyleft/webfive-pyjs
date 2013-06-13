@@ -16,7 +16,7 @@ def home(request):
     return Response(open(template).read())
 
 def process_all(request):
-    value = psutil.cpu_percent(interval=.5)
+    value = psutil.cpu_percent(interval=0.1)
     return Response(json.dumps(value))
 
 def process(request):
@@ -25,8 +25,9 @@ def process(request):
                        if psutil.Process(pid).name == name][0]
     if pid:
         proc = psutil.Process(pid)
-        value = proc.get_cpu_percent(interval=.5)
+        value = proc.get_cpu_percent(interval=0.1)
     else:
+        print("unknown process")
         value = 0
     return Response(json.dumps(value))
 
