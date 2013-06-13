@@ -1,0 +1,21 @@
+<link rel="import" href="polymer-ajax.html" />
+<link rel="import" href="polymer-graph.html" />
+
+<element name="process" attributes="name url refresh width height size">
+    <template>
+        <h3>{{name}}</h3>
+        <ajax id="ajax" url="{{url}}" refresh="{{refresh}}"></ajax>
+        <graph id="graph" size="{{size}}" width="{{width}}" height="{{height}}"></graph>
+  </template>
+  <script>
+    Polymer.register(this, {
+        ready: function() {
+            this.values = [];
+            var self = this;
+            this.$.ajax.callback = function(resp) {
+                self.$.graph.latestValue = resp;
+            }
+        }
+    });
+  </script>
+</element>

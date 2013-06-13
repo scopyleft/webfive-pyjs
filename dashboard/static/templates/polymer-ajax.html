@@ -1,0 +1,40 @@
+<element name="ajax" attributes="url refresh">
+    <script>
+    Polymer.register(this, {
+        url: "",
+        response: null,
+        refresh: 0,
+        callback: function(){},
+        httpRequest: null,
+        ready: function () {
+            this.httpRequest = new XMLHttpRequest();
+            this.update();
+        },
+        update: function() {
+            var self = this;
+            this.httpRequest.open('GET', this.url, true);
+            this.httpRequest.send();
+            this.httpRequest.onreadystatechange = function(resp) {
+                if(this.readyState !== 4)
+                    return;
+                if(this.status !== 200)
+                    return; //console.error("ajax responded with status "+this.status);
+                self.response = JSON.parse(this.responseText);
+            };
+        },
+        urlChanged: function() {
+            this.update();
+        },
+        refreshChanged: function() {
+            var self = this;
+            clearInterval(this.interval);
+            this.interval = setInterval(function() {
+                self.update();
+            }, this.refresh);
+        },
+        responseChanged: function() {
+            this.callback(this.response);
+        }
+    });
+    </script>
+</element>

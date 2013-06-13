@@ -15,20 +15,27 @@ def home(request):
     template = os.path.join(project_path, "static", "templates", "index.html")
     return Response(open(template).read())
 
+def process_all(request):
+    value = psutil.cpu_percent(interval=.5)
+    return Response(json.dumps(value))
+
 def process(request):
     name = request.matchdict.get('name')
     pid = [pid for pid in psutil.get_pid_list()
                        if psutil.Process(pid).name == name][0]
-    proc = psutil.Process(pid)
-    print name, pid
-    return Response(json.dumps(
-        proc.get_cpu_percent(interval=1)
-        ))
+    if pid:
+        proc = psutil.Process(pid)
+        value = proc.get_cpu_percent(interval=.5)
+    else:
+        value = 0
+    return Response(json.dumps(value))
 
 if __name__ == '__main__':
     config = Configurator()
     config.add_route('home', '/')
     config.add_view(home, route_name='home')
+    config.add_route('process_all', '/process')
+    config.add_view(process_all, route_name='process_all')
     config.add_route('process', '/process/{name}')
     config.add_view(process, route_name='process')
     config.add_static_view(name='static', path='static/')

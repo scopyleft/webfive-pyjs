@@ -1,16 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <script src="/static/polymer/polymer.js"></script>
-    <script src="/static/js/Chart.js"></script>
-    <link rel="import" href="/static/templates/system.html" />
-  </head>
+    <head>
+        <meta charset="utf-8" />
+        <script src="/static/polymer/polymer.js"></script>
+        <script src="/static/js/Chart.js"></script>
+        <link rel="import" href="/static/templates/polymer-process.html" />
+        <style type="text/css">
+          body {
+            font-family: Helvetica;
+          }
+          h1 {
+            border-bottom: 1px solid #999;
+          }
+          process {
+            float: left;
+            border: 1px solid #ccc;
+            padding: 5px 20px;
+            margin: 10px;
+          }
+        </style>
+    </head>
 
-  <body>
-    <h1>Dashboard</h1>
-    <ajax url="/process/firefox">
-  </body>
-
+    <body>
+        <h1>CPU dashboard</h1>
+        <process url="/process" name="Global" refresh="3000" width="960" height="150" size="20"></process>
+        <process url="/process/Finder" name="Finder" refresh="2000" width="280" height="150" size="10"></process>
+        <process url="/process/Mail" name="Mail" refresh="2000" width="280" height="150" size="10"></process>
+    </body>
 </html>
 
