@@ -1,9 +1,9 @@
-# Tornado + Polymer for web5 conference
+# Pyramid + Polymer dashboard for web5 conference
 
-**Rendering a CPU graph through websockets using Shadow DOM elements.**
+**Rendering CPU graphs through websockets using Shadow DOM elements.**
 
-`Tornado` (Python) is serving data retrieved by `psutil` (Python) via websockets.
-`gRahaeljs` (JavaScript) is drawing a line graph of this data updated via 
+`Pyramid` (Python) is serving data retrieved by `psutil` (Python) via AJAX.
+`ChartJS` (JavaScript) is drawing a line graph of this data updated via 
 `Polymer` (JavaScript) and rendered through reusable Shadow DOM elements.
 
 ## Usage
@@ -11,12 +11,12 @@
     $ pip install -r requirements.txt
     $ git clone git://github.com/Polymer/polymer.git --recursive static/polymer
     $ python server.py
-    go to http://localhost:8888/
-    click the button and enjoy!
+    go to http://localhost:8080/
+    just enjoy!
 
 ## Ressources
 
 * http://www.polymer-project.org/
-* http://www.tornadoweb.org/en/stable/
-* http://g.raphaeljs.com/
+* http://www.pylonsproject.org/
+* http://www.chartjs.org/
 * https://pypi.python.org/pypi/psutil/

@@ -18,7 +18,7 @@
                 if(this.readyState !== 4)
                     return;
                 if(this.status !== 200)
-                    return; //console.error("ajax responded with status "+this.status);
+                    console.error("ajax responded with status "+this.status);
                 self.response = JSON.parse(this.responseText);
             };
         },
