@@ -1,0 +1,83 @@
+@font-face {
+    font-family: 'OpenSansLight';
+    src: url('../fonts/OpenSans-Light-webfont.eot');
+    src: url('../fonts/OpenSans-Light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/OpenSans-Light-webfont.woff') format('woff'),
+         url('../fonts/OpenSans-Light-webfont.ttf') format('truetype'),
+         url('../fonts/OpenSans-Light-webfont.svg#OpenSansLight') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 960px;
+    margin: 0 auto;
+    font-family: "OpenSansLight";
+}
+body > header {
+    position: relative;
+    background: #fff url('../img/header.png') no-repeat;
+    height: 700px;
+}
+
+#catching {
+    position: absolute;
+    right: 80px;
+    text-align: center;
+    top: 290px;
+    width: 150px;
+    font-size: 2em;
+    color: #99cc64;
+}
+
+body > .container {
+    min-height: 365px;
+    padding: 40px;
+    background: #f7f7f7 url('../img/container.png') no-repeat center center;
+}
+
+#progress {
+    margin: 350px 0 0 0;
+}
+
+#graphs {
+    position: absolute;
+    top: 200px;
+    left: 50px;
+}
+#graphs > div {
+    height: 40px;
+    left: 90px;
+    position: absolute;
+    top: 20px;
+    width: 70px;
+    font-size: 1.5em;
+    text-align: center;
+}
+#graphs > div > div {
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    font-weight: normal;
+    color: #888;
+}
+#graphs > div:nth-child(2) {
+    position: absolute;
+    left: 300px;
+}
+#graphs > div > div > span {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+body > footer {
+    background: #99cc64 url('../img/footer.png') no-repeat center;
+    height: 155px;
+    padding: 0 20px;
+}
+
